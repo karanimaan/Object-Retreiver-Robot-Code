@@ -12,14 +12,13 @@ time.sleep(1)
 
 # Initialize the robotic arm with the specified pins
 ARM_init(chassis_pin, shoulder_pin, elbow_pin, wrist_pin, claws_pin)
+print('elbow')
+time.sleep(1)
+elbow_cmd(150)
 time.sleep(1)
 
-claws_cmd(120)
-time.sleep(1)
 
-shoulder_cmd(90)
 '''
-
 PtpCmd(0, 10, 3)
 time.sleep(1)
 
@@ -28,4 +27,6 @@ time.sleep(1)
 
 PtpCmd(0, 10, 4)
 time.sleep(1)
+
+print('done')
 '''

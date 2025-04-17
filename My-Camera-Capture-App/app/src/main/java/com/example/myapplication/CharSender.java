@@ -6,11 +6,11 @@ import java.net.Socket;
 
 // the ClientThread class performs
 // the networking operations
-class StringSender implements Runnable {
-    private final String message;
+class CharSender implements Runnable {
+    private final char command;
 
-    StringSender(String message) {
-        this.message = message;
+    CharSender(char command) {
+        this.command = command;
     }
     @Override
     public void run() {
@@ -19,7 +19,7 @@ class StringSender implements Runnable {
             // Creates a stream socket and connects it to the specified port number on the named host.
             Socket client = new Socket("192.168.4.1", 80); // connect to server
             PrintWriter printwriter = new PrintWriter(client.getOutputStream(), true);
-            printwriter.write(message); // write the message to output stream
+            printwriter.write(command); // write the message to output stream
 
             printwriter.flush();
             printwriter.close();

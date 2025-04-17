@@ -11,10 +11,10 @@ Error_right_poss = 0  # Initialize error for right position
 
 # Set initial angles for servos
 chassis_angle = 90
-shoulder_angle = 40
-elbow_angle = 50
+shoulder_angle = 90
+elbow_angle = 130
 claws_angle = 90
-wrist_angle = 90
+wrist_angle = 100
 
 # Initialize servo variables
 servo1 = None
@@ -98,14 +98,16 @@ def ARM_init(chassis_pin, shoulder_pin, elbow_pin, wrist_pin,claws_pin):
     time.sleep(0.1)
     servo5 = Servo(claws_pin)
     time.sleep(0.1)
-    '''
+
     # Move the steering gear to the specified Angle
     servo1.set_angle(chassis_angle)
     servo2.set_angle(shoulder_angle)
     servo3.set_angle(elbow_angle)
     servo4.set_angle(wrist_angle)
-    servo5.set_angle(claws_angle)
-'''
+    #servo5.set_angle(claws_angle)
+    
+    print('using this lib')
+
 # init servo angle
 def Zero():
     servo1.set_angle(90+Error_Pos)
