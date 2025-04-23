@@ -104,11 +104,11 @@ class MainActivity : AppCompatActivity() {
 
             val prevCommand = command
             command = when (true) {
-                (totalMass < 500) -> 's' // No blue pixels detected
-                (abs(comX) < 30) -> 'f'
-                (abs(comX) < 110 && prevCommand != 's') -> 's'  // #current makes command alternate between l and r
-                (comX < 0) -> 'l'
-                (comX > 0) -> 'r'
+                (totalMass !in 400..1900) -> 's' // Block is not in frame
+                (abs(comX) < 20) -> 'f' // Block within setpoint bound
+                (abs(comX) < 555 && prevCommand != 's') -> 's'  // Block moves past stop point. Makes command alternate between l and r
+                (comX < 0) -> 'l'   // Block is in the left half of the image
+                (comX > 0) -> 'r'   // Block is in the right half of the image
                 else -> 's'
             }
             sendMessage("$comX $command $totalMass")

@@ -40,12 +40,13 @@ s.listen(1)
 
 print(Ultrasonic.get_distance())
 
+
 while True:
     try:
         conn, addr = s.accept()
         
         command = conn.recv(1)
-        move = command.decode().lower()
+        move = command.decode().lower()	# decode() makes it UTF string I think
         print(move)
 
         if move == 'l':
@@ -58,9 +59,10 @@ while True:
             #vehicle.move(vehicle.Stop, 0)
         elif move == 's':
             vehicle.move(vehicle.Stop, 0)
+            print(Ultrasonic.get_distance())
         elif move == 'f':
             UT_distance = Ultrasonic.get_distance()
-            if UT_distance > 25:
+            if UT_distance > 9:
                 vehicle.move(vehicle.Forward, speeds)
                 #time.sleep(0.3)
                 #vehicle.move(vehicle.Stop, 0)
