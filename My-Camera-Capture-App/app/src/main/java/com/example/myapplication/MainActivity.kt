@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
             val prevCommand = command
             command = when (true) {
-                (totalMass !in 400..1900) -> 's' // Block is not in frame
+                (totalMass < 40) -> 'd' // Block is not in frame
                 (abs(comX) < 20) -> 'f' // Block within setpoint bound
                 (abs(comX) < 555 && prevCommand != 's') -> 's'  // Block moves past stop point. Makes command alternate between l and r
                 (comX < 0) -> 'l'   // Block is in the left half of the image
