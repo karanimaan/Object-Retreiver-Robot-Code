@@ -12,3 +12,4 @@ while True:
     
     #the distance of the ultrasonic detection
     print(UT_distance) # cm
+    time.sleep(0.1)

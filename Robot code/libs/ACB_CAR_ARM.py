@@ -11,10 +11,10 @@ Error_right_poss = 0  # Initialize error for right position
 
 # Set initial angles for servos
 chassis_angle = 90
-shoulder_angle = 90
-elbow_angle = 130
-claws_angle = 90
-wrist_angle = 100
+shoulder_angle = 40
+elbow_angle = 50
+claws_angle = 120
+wrist_angle = 90
 
 # Initialize servo variables
 servo1 = None
@@ -88,6 +88,8 @@ class Servo:
 # servo init
 def ARM_init(chassis_pin, shoulder_pin, elbow_pin, wrist_pin,claws_pin):
     global servo1, servo2, servo3, servo4, servo5
+    shoulder_pin = 33
+    wrist_pin = 26
     servo1 = Servo(chassis_pin)
     time.sleep(0.1)
     servo2 = Servo(shoulder_pin)
@@ -98,15 +100,13 @@ def ARM_init(chassis_pin, shoulder_pin, elbow_pin, wrist_pin,claws_pin):
     time.sleep(0.1)
     servo5 = Servo(claws_pin)
     time.sleep(0.1)
-
+    
     # Move the steering gear to the specified Angle
     servo1.set_angle(chassis_angle)
     servo2.set_angle(shoulder_angle)
     servo3.set_angle(elbow_angle)
-    servo4.set_angle(wrist_angle)
-    #servo5.set_angle(claws_angle)
-    
-    print('using this lib')
+    #servo4.set_angle(wrist_angle)
+    servo5.set_angle(claws_angle)
 
 # init servo angle
 def Zero():
@@ -441,7 +441,7 @@ def PtpCmd(x, y, z):
     elif y > 25 or y < 0:
         print("Exceeds the value range of y.")
         return
-    elif z > 36 or z < 0:
+    elif z > 36 or z < -1:
         print("Exceeds the value range of z.")
         return
     elif x == 0 and y == 0 and z < 28:
@@ -525,6 +525,7 @@ def PtpCmd(x, y, z):
     time.sleep(0.1)
     shoulder_cmd(servo_angle2)
     shoulder_angle = servo_angle2
+    print(shoulder_angle)
     
 def Chassis_angle_adjust(chassis_pos):
     global Error_Pos, chassis_angle
