@@ -18,16 +18,16 @@ claws_pin = 4       # Wrist control pin
 ARM_init(chassis_pin, shoulder_pin, elbow_pin, wrist_pin, claws_pin)
 time.sleep(1)
 
-chassis_cmd(10)
+# move arm out of way of camera
+
+chassis_cmd(10)    # move chassis servo to 10 degrees
 time.sleep(1)
 
-shoulder_cmd(0)
+shoulder_cmd(0)    # move shoulder servo to 0 degrees
 time.sleep(1)
 
 elbow_cmd(45)
 time.sleep(1)
-
-
 
 
 # WiFi configuration
@@ -75,41 +75,32 @@ while True:
 
         if move == 'l':
             vehicle.move(vehicle.Contrarotate, speeds)
-            #time.sleep(0.3)
-            #vehicle.move(vehicle.Stop, 0)
         elif move == 'r':
             vehicle.move(vehicle.Clockwise, speeds)
-            #time.sleep(0.3)
-            #vehicle.move(vehicle.Stop, 0)
         elif move == 's':
             vehicle.move(vehicle.Stop, 0)
             print(Ultrasonic.get_distance())
-        
-            
-            
         elif move == 'f':
             UT_distance = Ultrasonic.get_distance()
             if UT_distance > 14:
                 vehicle.move(vehicle.Forward, speeds)
-                #time.sleep(0.3)
-                #vehicle.move(vehicle.Stop, 0)
             else:
                 vehicle.move(vehicle.Stop, 0)
-                
-
             print(UT_distance)
-        #time.sleep(0.5)
         elif move == 'd':
-            # move arm
             vehicle.move(vehicle.Stop, 0)
-
             time.sleep(1)
+
+            # move arm
 
             shoulder_cmd(40)
             time.sleep(1)
 
+            # open claws
             claws_cmd(140)
             time.sleep(1)
+
+            # set arm to initial position
 
             chassis_cmd(90)
             time.sleep(1)
@@ -120,20 +111,21 @@ while True:
             elbow_cmd(90)
             time.sleep(1)
 
+            # move arm to block
             UT_distance = Ultrasonic.get_distance()
             print(UT_distance)
             PtpCmd(0, UT_distance+1, 0)
             time.sleep(3)
 
-            # shoulder_cmd(148)
-            # time.sleep(3)
-
+            # grab block
             claws_cmd(110)
             time.sleep(1)
 
+            # lift block
             shoulder_cmd(90)
             time.sleep(1)
 
+            # let go of block
             claws_cmd(140)
             time.sleep(1)
     finally:

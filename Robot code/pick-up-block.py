@@ -18,11 +18,10 @@ claws_pin = 4       # Wrist control pin
 ARM_init(chassis_pin, shoulder_pin, elbow_pin, wrist_pin, claws_pin)
 time.sleep(1)
 
-
-shoulder_cmd(40)
+shoulder_cmd(40)    # move shoulder servo to 40 degrees
 time.sleep(1)
 
-claws_cmd(140)
+claws_cmd(140)      # move claws servo to 140 degrees
 time.sleep(1)
 
 # set to initial position
