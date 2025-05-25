@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-// the ClientThread class performs
-// the networking operations
+// Sends a single character to the ESP32
 class CharSender implements Runnable {
     private final char command;
 
@@ -15,9 +14,9 @@ class CharSender implements Runnable {
     @Override
     public void run() {
         try {
-            // the IP and port should be correct to have a connection established
-            // Creates a stream socket and connects it to the specified port number on the named host.
-            Socket client = new Socket("192.168.4.1", 80); // connect to server
+            // Creates a socket and connects it to the specified port number on the specified host
+            Socket client = new Socket("192.168.4.1", 80);
+
             PrintWriter printwriter = new PrintWriter(client.getOutputStream(), true);
             printwriter.write(command); // write the message to output stream
 

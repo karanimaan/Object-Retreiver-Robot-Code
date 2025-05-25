@@ -5,8 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,27 +20,16 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.nio.ByteBuffer
-import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import android.view.Surface
 import android.widget.TextView
-import java.lang.Thread.sleep
 import kotlin.math.abs
-
-typealias LumaListener = (luma: Double) -> Unit
-typealias brighterSideListener = (brighterSide: String) -> Unit
 
 class MainActivity : AppCompatActivity() {
 
-    private var sumDuration: Long = 0
-    private var count: Int = 0
 
-
-
-
-
-    private inner class MyAnalyzer(private val sendMessage: (String) -> Unit, imageView: ImageView) : ImageAnalysis.Analyzer {
+    private inner class MyAnalyzer(private val sendMessage: (String) -> Unit) : ImageAnalysis.Analyzer {
 
         private var previousStartTime: Long = 0
         var command: Char = 's'
@@ -57,26 +44,18 @@ class MainActivity : AppCompatActivity() {
 
         override fun analyze(image: ImageProxy) {
 
-            val startAnalyzeTime = System.currentTimeMillis()
+            //val startAnalyzeTime = System.currentTimeMillis()
             //Log.d("Timing", "Current time: $startAnalyzeTime")
-            val repDuration = startAnalyzeTime - previousStartTime
-//            sumDuration = sumDuration + repDuration
-//            count++
+            //val repDuration = startAnalyzeTime - previousStartTime
             //Log.d("Timing", "Rep duration: $repDuration")
-
-            previousStartTime = startAnalyzeTime
+            //previousStartTime = startAnalyzeTime
 
             //command
             val buffer = image.planes[0].buffer
             val width = image.width
             val height = image.height
 
-            var leftCount = 0
-            var rightCount = 0
-
-            //var bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-
-            val downsampleFactor = 1 // Analyze every other pixel
+            val downsampleFactor = 1 // Option to increase analysis speed at cost of accuracy
 
             var totalMass = 0
             var weightedSumX = 0
@@ -100,7 +79,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             val comX = if (totalMass > 0) weightedSumX / totalMass else -1
-            val threshold = width * 0.3 // 10% of image width
 
             val prevCommand = command
             command = when (true) {
@@ -113,16 +91,16 @@ class MainActivity : AppCompatActivity() {
             }
             sendMessage("$comX $command $totalMass")
 
-            val endAnalyzeTime = System.currentTimeMillis()
-            val analyzeDuration = endAnalyzeTime - startAnalyzeTime
-           // Log.d("Timing", "Analyze duration: $analyzeDuration")
+            //val endAnalyzeTime = System.currentTimeMillis()
+            //Log.d("Timing", "endAnalyzeTime: $endAnalyzeTime")
+            //val analyzeDuration = endAnalyzeTime - startAnalyzeTime
+            //Log.d("Timing", "Analyze duration: $analyzeDuration")
             //Log.d("command", "$prevCommand to $command")
 
             if (command != prevCommand) {
                 Log.d("command", "sending $command")
                 Thread(CharSender(command)).start()
             }
-//            Log.d("Timing", "endAnalyzeTime: $endAnalyzeTime")
             Log.d("cmd", "$prevCommand -> $command")
             image.close()
         }
@@ -132,9 +110,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private var imageCapture: ImageCapture? = null
-
     private lateinit var cameraExecutor: ExecutorService
-
     private val activityResultLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -156,9 +132,8 @@ class MainActivity : AppCompatActivity() {
                 startCamera()
             }
         }
-
-    private lateinit var imageView: ImageView
     private var generateImage = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -177,26 +152,14 @@ class MainActivity : AppCompatActivity() {
             requestPermissions()
         }
 
-
         cameraExecutor = Executors.newSingleThreadExecutor()
-
-        imageView = findViewById(R.id.imageView)
-        val generatePhotoButton = findViewById<Button>(R.id.generatePhotoButton)
-        generatePhotoButton.setOnClickListener { takePhoto() }
-
-    }
-
-    private fun takePhoto() {
-        generateImage = true
     }
 
 
     private fun startCamera() {
 
-        // for image preview
-
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        val viewFinder = findViewById<PreviewView>(R.id.viewFinder) // preview component
+        val viewFinder = findViewById<PreviewView>(R.id.viewFinder) // preview GUI component
 
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
@@ -209,11 +172,9 @@ class MainActivity : AppCompatActivity() {
                     it.setSurfaceProvider(viewFinder.surfaceProvider)
                 }
 
-
             // for take photo
             imageCapture = ImageCapture.Builder()
                 .build()
-
 
             val label = findViewById<TextView>(R.id.brighterSideLabel)
             // for image analysis
@@ -223,13 +184,11 @@ class MainActivity : AppCompatActivity() {
                 .also {
                     it.setAnalyzer(cameraExecutor, MyAnalyzer({ counts ->
                         runOnUiThread {
-                            label.text = "$counts"
+                            label.text = counts
                             generateImage = true
                         }
-                    }, imageView))
+                    }))
                 }
-
-
 
             imageAnalyzer.targetRotation = Surface.ROTATION_90
             imageCapture?.targetRotation = Surface.ROTATION_90
@@ -274,17 +233,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-
-        if (count != 0) {
-            Log.d("Timing", "Average duration: ${sumDuration / count}")
-        }
         Thread(CharSender('s')).start()  // Send to ESP
-
     }
 
     override fun onPause() {
         super.onPause()
-
         Thread(CharSender('s')).start()  // Send to ESP
     }
 
@@ -300,15 +253,6 @@ class MainActivity : AppCompatActivity() {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
             }.toTypedArray()
-    }
-
-    fun sendMessage(command: String) {
-
-        // Get current timestamp (milliseconds since Unix epoch)
-        val timestamp = System.currentTimeMillis()
-
-        val message = "/Car?move=${command.lowercase(Locale.getDefault())} &$timestamp"
-
     }
 
 
