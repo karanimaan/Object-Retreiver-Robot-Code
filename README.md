@@ -11,8 +11,7 @@
 - [CharSender.java](My-Camera-Capture-App/app/src/main/java/com/example/myapplication/CharSender.java)
 
 ## Robot Program
-[move-to-and-pick-up-block.py](Robot code/move-to-and-pick-up-block.py)
+[move-to-and-pick-up-block.py]("Robot code/move-to-and-pick-up-block.py")
 
-</div>
-
-![photo of robot](https://github.com/user-attachments/assets/21b545be-cd5c-4605-8736-2be5eb632939)
+## Photo of Robot
+<img alt="photo of robot" src="https://github.com/user-attachments/assets/5f31efce-ba2d-4128-b29f-00c910407620" width="200" />
