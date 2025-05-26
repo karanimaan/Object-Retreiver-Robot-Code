@@ -14,4 +14,4 @@
 [move-to-and-pick-up-block.py](Robot%20code/move-to-and-pick-up-block.py)
 
 ## Photo of Robot
-<img alt="photo of robot" src="https://github.com/user-attachments/assets/5f31efce-ba2d-4128-b29f-00c910407620" width="400" />
+<img alt="photo of robot" src="https://github.com/user-attachments/assets/5f31efce-ba2d-4128-b29f-00c910407620" width="300" />
