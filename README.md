@@ -15,4 +15,4 @@
 
 </div>
 
-![Photo of robot](photo of robot.jpg)
+![photo of robot](https://github.com/user-attachments/assets/21b545be-cd5c-4605-8736-2be5eb632939)
