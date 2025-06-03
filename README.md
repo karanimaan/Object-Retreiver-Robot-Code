@@ -6,8 +6,8 @@
 </div>
 
 ## Demonstration Videos
-[Move to block and slightly pick up block video](Demo%20videos/integrated%203%20-%20slight%20pickup.mp4)
-[Pick up block video](Demo%20videos/pick%20up%20block.mp4)
+- [Move to block and slightly pick up block video](Demo%20videos/integrated%203%20-%20slight%20pickup.mp4)
+- [Pick up block video](Demo%20videos/pick%20up%20block.mp4)
 
 ## Android Application
 ### Classes
