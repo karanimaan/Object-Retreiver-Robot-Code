@@ -4,6 +4,7 @@
 
 
 </div>
+The project is described in briefly the [poster](Object-Seeking%20Robot%20Poster.pdf) and in more detail the [report](Report.pdf).
 
 ## Demonstration Videos
 - [Move to block and slightly pick up block video](Demo%20videos/integrated%203%20-%20slight%20pickup.mp4)
